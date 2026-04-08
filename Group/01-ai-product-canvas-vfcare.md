@@ -1,4 +1,4 @@
-# 1. AI Product Canvas - Nguyễn Thị Tuyết -2A202600215
+# 1. AI Product Canvas
 
 **Đề tài:** `VFCare` - Trợ lý AI dự đoán và tự động đặt lịch bảo dưỡng xe VinFast cá nhân hóa.
 

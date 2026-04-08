@@ -231,6 +231,44 @@
 | Failure        | Sai / lỗi hệ thống | Bảo vệ UX, giảm churn      |
 | Correction     | User override      | Signal học mạnh nhất       |
 
+## 3. Eval metrics + threshold (Hứa Quang Linh - 2A202600466)
+
+Đối với bài toán **AI Agent đặt lịch bảo trì VinFast**, câu trả lời ngắn gọn và chuẩn xác nhất là: **Optimize Precision.**
+
+Dưới đây là phân tích lý do dựa trên bối cảnh dịch vụ cao cấp:
+
+### ☑ Precision — khi AI nói "có" thì thực sự đúng (ít false positive)
+
+### Tại sao?
+Trong dịch vụ đặt lịch (Booking), **sự tin cậy (Trust)** là yếu tố sống còn. 
+* **Precision cao** nghĩa là khi Agent xác nhận: *"Anh đã đặt lịch thành công lúc 9h sáng mai tại VinFast Landmark 81"*, thì chắc chắn 100% slot đó đã được giữ trên hệ thống và xưởng đã sẵn sàng đón khách. 
+* Khách hàng của VinFast (đặc biệt là dòng xe điện cao cấp) thường là những người bận rộn. Họ cần sự khẳng định tuyệt đối để sắp xếp công việc cá nhân.
+
+---
+
+### Nếu sai ngược lại thì sao? (Nếu ưu tiên Recall mà bỏ qua Precision)
+
+Nếu chọn **Recall**, AI sẽ cố gắng "vơ" hết mọi yêu cầu của khách để chốt lịch bằng được (giảm False Negative - không bỏ sót đơn hàng), nhưng dễ dẫn đến sai sót (False Positive - xác nhận bừa).
+
+**Hậu quả khi Precision thấp (Sai ngược lại):**
+1.  **Trùng lịch (Double Booking):** Agent xác nhận lịch cho khách trong khi xưởng thực tế đã kín chỗ. Khách lái xe đến và bị từ chối phục vụ.
+2.  **Sai lệch thông tin:** Agent xác nhận sai gói bảo dưỡng hoặc sai địa điểm xưởng.
+3.  **Khủng hoảng niềm tin:** Chỉ cần **một lần** khách hàng đến xưởng mà không có tên trong danh sách do lỗi AI, họ sẽ không bao giờ sử dụng Agent nữa và quay lại gọi tổng đài truyền thống. Chi phí để khắc phục một lỗi "False Positive" (khách đến xưởng nhưng không được phục vụ) đắt hơn gấp nhiều lần so với việc Agent nói: *"Em không chắc chắn về lịch này, để em nối máy với nhân viên hỗ trợ"* (một lỗi False Negative an toàn).
+
+ **Kết luận**: Trong các hệ thống AI giao dịch (Transactional AI), thà để Agent trả lời "Em không biết/Em chưa rõ" (giảm Recall) để chuyển cho người thật, còn hơn là đưa ra thông tin sai lệch nhưng khẳng định là đúng (thấp Precision). 
+
+**Precision là nền tảng của sự chuyên nghiệp trong dịch vụ hạng sang.**
+
+## Metrics table
+
+| Chỉ số (Metric) | Ngưỡng đạt (Threshold) | Báo động (Red Flag) |
+|-----------------|------------------------|---------------------|
+| Booking Success Rate | > 85% cuộc hội thoại chốt lịch thành công. | < 50%: Quy trình đang gây khó khăn cho khách. |
+| Slot Accuracy | 100% không trùng lịch (Double-booking). | > 0%: Sai lệch dữ liệu giữa AI và thực tế xưởng. |
+| Information Extraction Accuracy | > 95% nhận diện đúng biển số/số điện thoại/số ODO. | < 80%: Agent liên tục hỏi lại các thông tin đã cung cấp. |
+| Fallback Rate | < 10% cuộc gọi phải chuyển cho nhân viên thật. | > 25%: Khả năng xử lý ngôn ngữ tự nhiên của Agent kém. |
+| Schedule Adherence Rate | > 90% khách hàng đến đúng khung giờ AI đã đặt. | < 70%: Quy trình nhắc lịch (reminder) của Agent chưa hiệu quả. |
+
 ---
 ### 4. Top 3 failure modes
 

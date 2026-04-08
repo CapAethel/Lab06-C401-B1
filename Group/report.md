@@ -32,7 +32,7 @@
 
 ---
 
-# 2. User Stories x 4 Paths
+# 2. User Stories x 4 Paths - Chu Bá Tuấn Anh - 2A202600012
 
 ## 2.1 Happy Path (ideal flow)
 
@@ -230,3 +230,21 @@
 | Low-confidence | Cần explain        | Tăng trust                 |
 | Failure        | Sai / lỗi hệ thống | Bảo vệ UX, giảm churn      |
 | Correction     | User override      | Signal học mạnh nhất       |
+
+---
+### 4. Top 3 failure modes
+
+*Liệt kê cách product có thể fail — không phải list features.*
+*"Failure mode nào user KHÔNG BIẾT bị sai? Đó là cái nguy hiểm nhất."*
+
+| # | Trigger | Hậu quả | Mitigation |
+|---|---------|---------|------------|
+| 1 | AI báo "Đặt lịch thành công" nhưng thực tế xưởng không ghi nhận hoặc đã quá tải: Hệ thống app đặt lịch không đồng bộ realtime với tình trạng thực tế tại xưởng (đặc biệt khi có lượng lớn xe Xanh SM đột xuất đổ về). | User KHÔNG BIẾT bị lỗi. Người dùng đinh ninh đã có lịch, chạy xe hàng chục km đến nơi mới bị xưởng báo "không có thông tin trên hệ thống" hoặc "xưởng đã kín chỗ", bắt buộc phải quay về. | Thay vì báo thành công ngay, AI đưa vào trạng thái "Chờ xưởng xác nhận" (2-way handshake). Nếu API xưởng báo tải trọng >90%, AI tự động lock slot tại xưởng đó và chủ động gợi ý xưởng khác lân cận. |
+| 2 | Hệ thống AI/App ghi nhận sai thời gian check-in: Người dùng mang xe đến xưởng đúng giờ đã hẹn nhưng hệ thống định vị của app phản hồi chậm hoặc lỗi đồng bộ. | Hệ thống tự động đánh dấu khách "đến trễ", âm thầm tự động hủy lịch. Người dùng không hề hay biết cho đến khi gặp lễ tân. | Thiết lập tính năng chủ động Check-in bằng nút bấm trên app khi vào bán kính 500m của xưởng. Khi hệ thống đếm ngược hết giờ, AI phải gửi Push Notification "Bạn đã đến nơi chưa?" thay vì tự động hủy. |
+| 3 | AI tiếp nhận lịch sửa chữa nhưng bỏ qua bước kiểm tra tồn kho phụ tùng / thời gian lưu xe: Người dùng nhập mô tả lỗi (VD: kẹt kính, hư mô tơ, lỗi túi khí), AI tự động xếp lịch vào một slot trống ngắn hạn. | Đã xảy ra rồi mới biết. Người dùng mang xe đến xưởng kỳ vọng sửa nhanh rồi về, nhưng đến nơi mới vỡ lẽ xưởng không có sẵn phụ tùng thay thế hoặc lỗi phức tạp bắt buộc phải "giam xe" qua ngày, làm hỏng hoàn toàn lịch trình cá nhân. | Khi AI nhận diện các từ khóa báo lỗi phần cứng, hệ thống phải tự động cross-check với API kho phụ tùng. Nếu phát hiện thiếu linh kiện, cảnh báo ngay: *"Lỗi này hiện cần chờ nhập linh kiện, AI đề xuất dời lịch sang tuần sau"*. |
+
+---
+
+**Lý do chọn 3 failure modes này:**
+#1 và #2 là lỗi Silent Failure điển hình của hệ thống Automation. Máy móc tưởng là đúng nhưng thực tế sai, và khách hàng hoàn toàn không biết mình bị lỗi cho đến khi mất thời gian/công sức đến tận xưởng.
+#3 là lỗi Delayed Realization, hệ thống augmentation thiếu data (không nối với API kho). AI đặt lịch rất trơn tru nhưng hệ quả (giam xe, thiếu đồ) thì khách hàng đến nơi mới chịu đựng.

@@ -1,5 +1,7 @@
 # Hackathon rules
 
+
+
 Luật chơi hackathon AI Thực Chiến. Đọc kỹ trước khi bắt đầu.
 
 ---

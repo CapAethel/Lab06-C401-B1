@@ -83,66 +83,18 @@ class VFCareGraphAgent:
     
     def _print_results(self, state: VFCareGraphState) -> None:
         """Print execution results"""
-        print("\n" + "="*60)
-        print("📊 EXECUTION RESULTS")
-        print("="*60)
+        print()
         
         if state.error:
-            print(f"\n❌ Error: {state.error}")
-            return
-        
-        # Print vehicle info
-        print(f"\n🚗 Vehicle: {state.vehicle_data.get('vehicle_name', 'Unknown')}")
-        print(f"   Mileage: {state.vehicle_data.get('total_mileage_km', 0)} km")
-        print(f"   Battery Health: {state.vehicle_data.get('battery', {}).get('health_percent', 0)}%")
-        
-        # Print analysis results
-        print(f"\n📈 Analysis:")
-        print(f"   Priority: {state.vehicle_priority.upper()}")
-        print(f"   Risk Score: {state.risk_score}/100")
-        print(f"   Issues Found: {len(state.detected_issues)}")
-        
-        # Print issues
-        if state.detected_issues:
-            print(f"\n🔍 Issues:")
-            for issue in state.detected_issues[:5]:
-                print(f"   - {issue['recommendation']} ({issue['priority']}, {issue['base_risk_score']}/100)")
-        
-        # Print recommendations
-        if state.recommendations:
-            print(f"\n💡 Recommendations:")
-            print(f"   Urgency: {state.recommendations.get('urgency', 'N/A')}")
-            print(f"   Message: {state.recommendations.get('message', 'N/A')}")
-        
-        # Print workshops
-        if state.available_workshops:
-            print(f"\n🔧 Available Workshops:")
-            for ws in state.available_workshops[:3]:
-                print(f"   - {ws['name']} ({ws['distance_km']} km, {ws['rating']}/5)")
-        
-        # Print booking
-        if state.selected_workshop and state.user_feedback.get('id'):
-            print(f"\n✅ Booking:")
-            print(f"   Workshop: {state.selected_workshop.get('name', 'N/A')}")
-            print(f"   Date: {state.selected_time_slot.get('date', 'N/A')}")
-            print(f"   Time: {state.selected_time_slot.get('time', 'N/A')}")
-            print(f"   Booking ID: {state.user_feedback.get('id', 'N/A')}")
+            print(f"❌ Lỗi: {state.error}")
         elif state.user_action == "decline":
-            print(f"\n❌ Booking Declined")
-            print(f"   User did not confirm the workshop suggestion")
-        
-        # Print LLM conversation
-        print(f"\n💬 LLM Conversation:")
-        print("   " + "-"*56)
-        for msg in state.messages[-6:]:  # Show last 6 messages
-            role = msg['role'].upper()
-            content = msg['content'][:100] + "..." if len(msg['content']) > 100 else msg['content']
-            print(f"   [{role}] {content}")
-        print("   " + "-"*56)
-        
-        print("\n" + "="*60)
-        print("✅ Demo completed!")
-        print("="*60 + "\n")
+            print("❌ Từ chối đặt lịch hẹn")
+        elif state.user_action == "no_issues":
+            print("✅ Xe không có vấn đề cần xử lý")
+        elif state.user_feedback.get('id'):
+            print("✅ Đặt lịch thành công!")
+        else:
+            print("⚠️ Quá trình hoàn thành nhưng chưa xác nhận")
 
 
 if __name__ == "__main__":

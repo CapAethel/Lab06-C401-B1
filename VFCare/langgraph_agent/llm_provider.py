@@ -1,6 +1,6 @@
 """LLM provider abstraction for VFCare Agent"""
 from typing import Any
-from langchain_core.messages import BaseMessage, HumanMessage
+from langchain_core.messages import BaseMessage, HumanMessage, SystemMessage
 
 
 def get_llm() -> Any:
@@ -39,9 +39,31 @@ def get_llm() -> Any:
 
 
 def call_llm(llm: Any, messages: list[BaseMessage] | str) -> str:
-    """Call LLM and return response text"""
+    """Call LLM and return response text
+    
+    Args:
+        llm: LLM instance
+        messages: Either a list of BaseMessage objects or a string
+        
+    Returns:
+        Response text from the LLM
+    """
     if isinstance(messages, str):
         messages = [HumanMessage(content=messages)]
+    elif isinstance(messages, list) and all(isinstance(m, dict) for m in messages):
+        # Convert dict messages to proper BaseMessage objects
+        converted = []
+        for m in messages:
+            role = m.get("role", "user")
+            content = m.get("content", "")
+            if role == "system":
+                converted.append(SystemMessage(content=content))
+            elif role == "assistant":
+                from langchain_core.messages import AIMessage
+                converted.append(AIMessage(content=content))
+            else:
+                converted.append(HumanMessage(content=content))
+        messages = converted
     
     response = llm.invoke(messages)
     

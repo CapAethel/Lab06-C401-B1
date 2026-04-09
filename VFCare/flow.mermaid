@@ -1,0 +1,43 @@
+flowchart TD
+    A([Hệ thống phát hiện ngưỡng bảo dưỡng]):::trigger --> B[AI gợi ý lịch bảo dưỡng\nPush notification đến user]:::ai
+
+    B --> C{Phản hồi\ncủa user?}
+
+    C -->|Chấp nhận ngay| H1[Xem chi tiết xưởng + slot]:::happy
+    C -->|Xem thêm| L1[Xem explainability\nConfidence score]:::low
+    C -->|Từ chối| F1[Bấm Chưa cần BĐ]:::fail
+    C -->|Chỉnh sửa| COR1[Chỉnh giờ / Xưởng / Dịch vụ]:::correction
+
+    H1 --> H2[check_slot_availability]:::tool
+    H2 -->|Thành công| H3[book_appointment]:::tool
+    H2 -->|Lỗi / Timeout| ERR[Fallback\nHotline hoặc Retry]:::error
+
+    L1 --> L2[So sánh lịch sử\nDự đoán rủi ro trì hoãn]:::low
+    L2 --> L3[Chọn slot khác]:::low
+    L3 --> H3
+
+    F1 --> F2[Hỏi lý do\nMới BĐ / Chưa cần / Khác]:::fail
+    F2 --> F3[Dừng nhắc X ngày\nUpdate model]:::fail
+    F3 --> SIG
+
+    COR1 --> COR2[Re-run recommend_schedule\nValidate constraint]:::correction
+    COR2 --> COR3[Confirm lịch tuỳ chỉnh]:::correction
+    COR3 --> H3
+
+    H3 --> OK([Đặt lịch thành công\nQR check-in + Reminder]):::success
+
+    OK --> SIG[Learning signal\naccept / modify / override → model update]:::signal
+    SIG --> OUT([Outcome: giảm breakdown\ngiảm chờ · giảm chi phí]):::outcome
+    OUT -.->|Cá nhân hoá| B
+
+    classDef trigger fill:#EEEDFE,stroke:#534AB7,color:#26215C
+    classDef ai fill:#E1F5EE,stroke:#0F6E56,color:#04342C
+    classDef happy fill:#E1F5EE,stroke:#0F6E56,color:#04342C
+    classDef low fill:#E6F1FB,stroke:#185FA5,color:#042C53
+    classDef fail fill:#FCEBEB,stroke:#A32D2D,color:#501313
+    classDef correction fill:#FAECE7,stroke:#993C1D,color:#4A1B0C
+    classDef tool fill:#F1EFE8,stroke:#5F5E5A,color:#2C2C2A
+    classDef error fill:#FCEBEB,stroke:#A32D2D,color:#501313
+    classDef success fill:#EAF3DE,stroke:#3B6D11,color:#173404
+    classDef signal fill:#FAEEDA,stroke:#854F0B,color:#412402
+    classDef outcome fill:#EEEDFE,stroke:#534AB7,color:#26215C

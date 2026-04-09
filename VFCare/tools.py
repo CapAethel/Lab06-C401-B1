@@ -174,18 +174,45 @@ def check_slot_availability(workshop_id: str, date: str = None) -> str:
     """Kiểm tra các slot trống của xưởng, có thể lọc theo ngày."""
     slots = WORKSHOP_SLOTS.get(workshop_id, [])
     if not slots:
-        return json.dumps({"error": f"Không tìm thấy xưởng {workshop_id}"}, ensure_ascii=False)
+        return json.dumps({
+            "error": f"Không tìm thấy xưởng {workshop_id}",
+            "fallback": {
+                "hotline": "1900 23 23 89",
+                "message": "Vui lòng gọi hotline để được hỗ trợ đặt lịch trực tiếp.",
+                "can_retry": True,
+                "retry_suggestion": "Thử kiểm tra xưởng khác hoặc ngày khác.",
+            },
+        }, ensure_ascii=False)
 
     available = [s for s in slots if s["available"]]
     if date:
         available = [s for s in available if s["date"] == date]
+
+    if not available:
+        # Gợi ý ngày khác có slot
+        all_available = [s for s in slots if s["available"]]
+        other_dates = sorted(set(s["date"] for s in all_available))[:3]
+        workshop = next((ws for ws in WORKSHOPS if ws["id"] == workshop_id), {})
+        return json.dumps({
+            "workshop_id": workshop_id,
+            "workshop_name": workshop.get("name", ""),
+            "total_available": 0,
+            "slots": [],
+            "fallback": {
+                "hotline": "1900 23 23 89",
+                "message": f"Ngày {date} không còn slot trống." if date else "Xưởng hiện không còn slot trống.",
+                "can_retry": True,
+                "retry_suggestion": "Thử chọn ngày hoặc xưởng khác.",
+                "other_available_dates": other_dates,
+            },
+        }, ensure_ascii=False)
 
     workshop = next((ws for ws in WORKSHOPS if ws["id"] == workshop_id), {})
     return json.dumps({
         "workshop_id": workshop_id,
         "workshop_name": workshop.get("name", ""),
         "total_available": len(available),
-        "slots": available[:10],  # trả tối đa 10 slot
+        "slots": available[:10],
     }, ensure_ascii=False)
 
 
@@ -198,12 +225,31 @@ def book_appointment(workshop_id: str, slot_id: str, error_codes: list[str], not
 
     workshop = next((ws for ws in WORKSHOPS if ws["id"] == workshop_id), None)
     if not workshop:
-        return json.dumps({"error": f"Không tìm thấy xưởng {workshop_id}"}, ensure_ascii=False)
+        return json.dumps({
+            "error": f"Không tìm thấy xưởng {workshop_id}",
+            "fallback": {
+                "hotline": "1900 23 23 89",
+                "message": "Xưởng không tồn tại. Vui lòng gọi hotline để được hỗ trợ.",
+                "can_retry": True,
+                "retry_suggestion": "Gọi lại recommend_schedule để chọn xưởng khác.",
+            },
+        }, ensure_ascii=False)
 
     slots = WORKSHOP_SLOTS.get(workshop_id, [])
     target_slot = next((s for s in slots if s["slot_id"] == slot_id and s["available"]), None)
     if not target_slot:
-        return json.dumps({"error": f"Slot {slot_id} không khả dụng hoặc đã được đặt.", "suggestion": "Vui lòng chọn slot khác hoặc gọi hotline 1900 23 23 89"}, ensure_ascii=False)
+        # Gợi ý slot trống khác tại cùng xưởng
+        other_available = [s for s in slots if s["available"]][:3]
+        return json.dumps({
+            "error": f"Slot {slot_id} không khả dụng hoặc đã được đặt.",
+            "fallback": {
+                "hotline": "1900 23 23 89",
+                "message": "Slot đã hết. Bạn có thể chọn slot khác hoặc gọi hotline.",
+                "can_retry": True,
+                "retry_suggestion": "Chọn slot trống khác tại cùng xưởng hoặc đổi xưởng.",
+                "alternative_slots": other_available,
+            },
+        }, ensure_ascii=False)
 
     # Đánh dấu slot đã đặt
     target_slot["available"] = False

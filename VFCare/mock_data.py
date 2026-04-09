@@ -14,7 +14,7 @@ VEHICLE = {
     "id": "VF8-001",
     "model": "VinFast VF8",
     "year": 2024,
-    "owner": "Bàn B1",
+    "owner": "X2 đẹp trai",
     "phone": "0901234567",
     "license_plate": "30A-12345",
     "odometer_km": 35200,
@@ -174,28 +174,28 @@ for ws in WORKSHOPS:
 # ══════════════════════════════════════════════════════════════
 
 def _generate_slots(workshop_id: str, days: int = 7) -> list[dict]:
-    """Tạo slot trống ngẫu nhiên cho xưởng trong N ngày tới."""
-    random.seed(hash(workshop_id))  # deterministic per workshop
+    """Tạo slot ngẫu nhiên cho xưởng: mỗi ngày chọn 2-4 slot trống từ 8h-17h."""
+    rng = random.Random(hash(workshop_id))  # deterministic per workshop
     slots = []
     base = datetime(2026, 4, 9, 8, 0)  # hôm nay
     slot_id = 1
     for d in range(days):
         day = base + timedelta(days=d)
-        # Mỗi ngày có 8 slot (8h-17h, mỗi slot 1 tiếng)
-        for hour in range(8, 17):
-            is_available = random.random() > 0.45  # ~55% trống
-            if is_available:
-                start = day.replace(hour=hour, minute=0)
-                end = day.replace(hour=hour + 1, minute=0)
-                slots.append({
-                    "slot_id": f"{workshop_id}-S{slot_id:03d}",
-                    "workshop_id": workshop_id,
-                    "date": start.strftime("%Y-%m-%d"),
-                    "start_time": start.strftime("%H:%M"),
-                    "end_time": end.strftime("%H:%M"),
-                    "available": True,
-                })
-                slot_id += 1
+        all_hours = list(range(8, 17))  # 9 khung giờ
+        num_available = rng.randint(2, 4)  # 2-4 slot trống mỗi ngày
+        available_hours = set(rng.sample(all_hours, num_available))
+        for hour in all_hours:
+            start = day.replace(hour=hour, minute=0)
+            end = day.replace(hour=hour + 1, minute=0)
+            slots.append({
+                "slot_id": f"{workshop_id}-S{slot_id:03d}",
+                "workshop_id": workshop_id,
+                "date": start.strftime("%Y-%m-%d"),
+                "start_time": start.strftime("%H:%M"),
+                "end_time": end.strftime("%H:%M"),
+                "available": hour in available_hours,
+            })
+            slot_id += 1
     return slots
 
 

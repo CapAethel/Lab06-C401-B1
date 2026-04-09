@@ -1,0 +1,64 @@
+{
+  "vehicle_id": "VF_LAC_HONG_001",
+  "vehicle_name": "VF Lạc Hồng",
+  "model": "VF 8",
+  "last_update": "2026-04-09T14:30:00Z",
+  "total_mileage_km": 45230,
+  "battery": {
+    "level_percent": 42,
+    "health_percent": 88,
+    "cycles": 156,
+    "temperature_celsius": 32,
+    "status": "Normal"
+  },
+  "motor": {
+    "status": "Normal",
+    "efficiency_percent": 94,
+    "temperature_celsius": 58
+  },
+  "brake_system": {
+    "status": "Warning",
+    "front_pad_thickness_mm": 3.2,
+    "rear_pad_thickness_mm": 4.1,
+    "fluid_level_percent": 78,
+    "last_maintenance_km": 35000
+  },
+  "suspension": {
+    "status": "Normal",
+    "front_left_mm": 165,
+    "front_right_mm": 164,
+    "rear_left_mm": 172,
+    "rear_right_mm": 171
+  },
+  "tire": {
+    "status": "Warning",
+    "front_left_pressure_psi": 31.5,
+    "front_right_pressure_psi": 30.8,
+    "rear_left_pressure_psi": 32.1,
+    "rear_right_pressure_psi": 31.2,
+    "front_left_tread_mm": 5.2,
+    "front_right_tread_mm": 4.8,
+    "rear_left_tread_mm": 6.1,
+    "rear_right_tread_mm": 5.9
+  },
+  "air_filter": {
+    "status": "Critical",
+    "efficiency_percent": 52,
+    "last_replacement_km": 30000
+  },
+  "cabin_filter": {
+    "status": "Normal",
+    "efficiency_percent": 85,
+    "last_replacement_km": 38000
+  },
+  "coolant": {
+    "status": "Normal",
+    "level_percent": 95,
+    "temperature_celsius": 82
+  },
+  "software": {
+    "version": "2.3.1",
+    "last_update": "2026-02-15",
+    "status": "Up to date"
+  }
+}

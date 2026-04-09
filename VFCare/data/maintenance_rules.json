@@ -1,0 +1,125 @@
+{
+  "rules": [
+    {
+      "rule_id": "BR_001",
+      "component": "brake_system",
+      "issue_type": "brake_pads_worn",
+      "condition": "front_pad_thickness_mm < 4.0 OR rear_pad_thickness_mm < 4.5",
+      "priority": "medium",
+      "base_risk_score": 65,
+      "recommendation": "Thay má phanh trước và sau",
+      "action": "schedule_maintenance",
+      "required_hours": 2
+    },
+    {
+      "rule_id": "BR_002",
+      "component": "brake_system",
+      "issue_type": "brake_pads_critical",
+      "condition": "front_pad_thickness_mm < 2.5 OR rear_pad_thickness_mm < 3.0",
+      "priority": "critical",
+      "base_risk_score": 85,
+      "recommendation": "CẦN NGAY: Thay má phanh khẩn cấp",
+      "action": "emergency_maintenance",
+      "required_hours": 1.5
+    },
+    {
+      "rule_id": "BR_003",
+      "component": "brake_system",
+      "issue_type": "brake_fluid_low",
+      "condition": "fluid_level_percent < 80",
+      "priority": "medium",
+      "base_risk_score": 55,
+      "recommendation": "Kiểm tra và bổ sung dầu phanh",
+      "action": "schedule_maintenance",
+      "required_hours": 0.5
+    },
+    {
+      "rule_id": "TI_001",
+      "component": "tire",
+      "issue_type": "tire_pressure_low",
+      "condition": "front_left_pressure_psi < 32 OR front_right_pressure_psi < 32 OR rear_left_pressure_psi < 32.5 OR rear_right_pressure_psi < 32.5",
+      "priority": "low",
+      "base_risk_score": 25,
+      "recommendation": "Bơm không khí vào lốp (kiểm tra áp suất tiêu chuẩn)",
+      "action": "monitor_or_schedule",
+      "required_hours": 0.25
+    },
+    {
+      "rule_id": "TI_002",
+      "component": "tire",
+      "issue_type": "tire_tread_low",
+      "condition": "front_left_tread_mm < 5.0 OR front_right_tread_mm < 5.0 OR rear_left_tread_mm < 5.5 OR rear_right_tread_mm < 5.5",
+      "priority": "medium",
+      "base_risk_score": 60,
+      "recommendation": "Thay lốp xe",
+      "action": "schedule_maintenance",
+      "required_hours": 1.5
+    },
+    {
+      "rule_id": "AF_001",
+      "component": "air_filter",
+      "issue_type": "air_filter_dirty",
+      "condition": "efficiency_percent < 70",
+      "priority": "medium",
+      "base_risk_score": 45,
+      "recommendation": "Thay lọc không khí",
+      "action": "schedule_maintenance",
+      "required_hours": 0.5
+    },
+    {
+      "rule_id": "AF_002",
+      "component": "air_filter",
+      "issue_type": "air_filter_critical",
+      "condition": "efficiency_percent < 50",
+      "priority": "critical",
+      "base_risk_score": 80,
+      "recommendation": "CẦN NGAY: Thay lọc không khí khẩn cấp",
+      "action": "emergency_maintenance",
+      "required_hours": 0.5
+    },
+    {
+      "rule_id": "BAT_001",
+      "component": "battery",
+      "issue_type": "battery_health_degraded",
+      "condition": "health_percent < 80",
+      "priority": "low",
+      "base_risk_score": 35,
+      "recommendation": "Theo dõi sức khỏe pin, cân nhắc thay pin trong tương lai",
+      "action": "monitor",
+      "required_hours": 0
+    },
+    {
+      "rule_id": "BAT_002",
+      "component": "battery",
+      "issue_type": "battery_temperature_high",
+      "condition": "temperature_celsius > 45",
+      "priority": "medium",
+      "base_risk_score": 70,
+      "recommendation": "Giảm tải, tránh sạc nhanh, kiểm tra hệ thống làm mát",
+      "action": "schedule_maintenance",
+      "required_hours": 1
+    },
+    {
+      "rule_id": "MOT_001",
+      "component": "motor",
+      "issue_type": "motor_efficiency_low",
+      "condition": "efficiency_percent < 90",
+      "priority": "medium",
+      "base_risk_score": 50,
+      "recommendation": "Kiểm tra và bảo dưỡng motor",
+      "action": "schedule_maintenance",
+      "required_hours": 2
+    },
+    {
+      "rule_id": "MAI_001",
+      "component": "brake_system",
+      "issue_type": "overdue_maintenance",
+      "condition": "total_mileage - last_maintenance_km > 10000",
+      "priority": "low",
+      "base_risk_score": 30,
+      "recommendation": "Bảo dưỡng định kỳ đến hạn",
+      "action": "schedule_maintenance",
+      "required_hours": 1
+    }
+  ]
+}

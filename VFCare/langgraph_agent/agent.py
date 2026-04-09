@@ -1,11 +1,7 @@
 """Main LangGraph Agent for VFCare"""
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'tools'))
-
 from langgraph.graph import StateGraph, END
-from state import VFCareGraphState, AgentState
-from nodes import VFCareNodes
+from .state import VFCareGraphState, AgentState
+from .nodes import VFCareNodes
 
 
 class VFCareGraphAgent:
@@ -51,16 +47,24 @@ class VFCareGraphAgent:
         print("\n" + "="*60)
         print("🚗 VFCare LangGraph Agent - Running Demo")
         print("="*60 + "\n")
-        
+
         # Initialize state
         initial_state = VFCareGraphState()
-        
+
         # Run graph
         final_state = self.graph.invoke(initial_state)
-        
+
+        # Convert dict to VFCareGraphState if needed
+        if isinstance(final_state, dict):
+            state_obj = VFCareGraphState()
+            for key, value in final_state.items():
+                if hasattr(state_obj, key):
+                    setattr(state_obj, key, value)
+            final_state = state_obj
+
         # Print results
         self._print_results(final_state)
-        
+
         return final_state
     
     def _print_results(self, state: VFCareGraphState) -> None:

@@ -1,6 +1,6 @@
 """Feedback Manager - Manages user feedback and booking confirmations"""
 from typing import Dict, Any, List
-from utils import load_json, save_json
+from .utils import load_json, save_json
 from datetime import datetime
 
 

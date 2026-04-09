@@ -1,6 +1,6 @@
 """Recommendation Engine - Generates maintenance recommendations"""
 from typing import List, Dict, Any
-from priority_calculator import PriorityCalculator
+from .priority_calculator import PriorityCalculator
 
 
 class RecommendationEngine:

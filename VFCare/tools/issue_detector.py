@@ -1,6 +1,6 @@
 """Issue Detector - Detects vehicle issues based on rules"""
 from typing import List, Dict, Any
-from utils import load_json, evaluate_condition, get_nested_value
+from .utils import load_json, evaluate_condition, get_nested_value
 import os
 
 

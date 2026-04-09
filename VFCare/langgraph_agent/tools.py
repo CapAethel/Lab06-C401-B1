@@ -3,8 +3,17 @@ from typing import Any
 import json
 import os
 from datetime import datetime
-from tools.utils import load_json, save_json
-from config import get_data_file_path
+
+# Try to import from parent tools package with fallback
+try:
+    from tools.utils import load_json, save_json
+except ImportError:
+    # Fallback: add parent to path and try again
+    import sys
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
+    from tools.utils import load_json, save_json
+
+from .config import get_data_file_path
 
 
 class VFCareTools:
@@ -70,6 +79,9 @@ class VFCareTools:
     @staticmethod
     def detect_issues_from_log(vehicle_data: dict, rules: list) -> dict[str, Any]:
         """Detect issues from vehicle log using rules"""
+        import sys
+        import os as os_module
+        sys.path.insert(0, os_module.path.join(os_module.path.dirname(__file__), '..'))
         from tools.issue_detector import IssueDetector
         import tempfile
         
@@ -101,6 +113,9 @@ class VFCareTools:
     @staticmethod
     def calculate_priority(issues: list) -> dict[str, Any]:
         """Calculate priority and risk score"""
+        import sys
+        import os as os_module
+        sys.path.insert(0, os_module.path.join(os_module.path.dirname(__file__), '..'))
         from tools.priority_calculator import PriorityCalculator
         
         try:
@@ -126,6 +141,9 @@ class VFCareTools:
     @staticmethod
     def generate_recommendations(issues: list, priority: str, risk_score: float) -> dict[str, Any]:
         """Generate recommendations based on priority"""
+        import sys
+        import os as os_module
+        sys.path.insert(0, os_module.path.join(os_module.path.dirname(__file__), '..'))
         from tools.recommendation_engine import RecommendationEngine
         
         try:
@@ -148,6 +166,9 @@ class VFCareTools:
     @staticmethod
     def suggest_workshops(workshops: list, priority: str, required_services: list = None) -> dict[str, Any]:
         """Suggest suitable workshops"""
+        import sys
+        import os as os_module
+        sys.path.insert(0, os_module.path.join(os_module.path.dirname(__file__), '..'))
         from tools.workshop_suggester import WorkshopSuggester
         
         try:
@@ -170,6 +191,9 @@ class VFCareTools:
     @staticmethod
     def save_user_feedback(feedback: dict) -> dict[str, Any]:
         """Save user feedback to JSON"""
+        import sys
+        import os as os_module
+        sys.path.insert(0, os_module.path.join(os_module.path.dirname(__file__), '..'))
         from tools.feedback_manager import FeedbackManager
         
         try:
@@ -198,6 +222,9 @@ class VFCareTools:
     @staticmethod
     def get_feedback_history() -> dict[str, Any]:
         """Get feedback history"""
+        import sys
+        import os as os_module
+        sys.path.insert(0, os_module.path.join(os_module.path.dirname(__file__), '..'))
         from tools.feedback_manager import FeedbackManager
         
         try:

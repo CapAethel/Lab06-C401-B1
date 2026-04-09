@@ -1,14 +1,10 @@
 """LangGraph nodes for VFCare Agent"""
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'tools'))
-
 from typing import Any
 from langchain_core.messages import HumanMessage, SystemMessage
-from state import VFCareGraphState, AgentState
-from tools import VFCareTools
-from llm_provider import get_llm, call_llm
-from config import get_vfcare_config, get_threshold_config
+from .state import VFCareGraphState, AgentState
+from .tools import VFCareTools
+from .llm_provider import get_llm, call_llm
+from .config import get_vfcare_config, get_threshold_config
 
 
 class VFCareNodes:
@@ -285,9 +281,12 @@ Explain which workshop is best and why (considering distance, rating, and urgenc
     def save_feedback_node(state: VFCareGraphState) -> VFCareGraphState:
         """Save feedback to JSON"""
         print("[NODE] Saving feedback...")
-        
+
+        import sys
+        import os as os_module
+        sys.path.insert(0, os_module.path.join(os_module.path.dirname(__file__), '..'))
         from tools.feedback_manager import FeedbackManager
-        from config import get_data_file_path
+        from .config import get_data_file_path
         
         if state.user_feedback:
             feedback_file = get_data_file_path("user_feedback.json")

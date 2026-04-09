@@ -8,7 +8,7 @@ import json
 import os
 from openai import OpenAI
 from tools import TOOL_DEFINITIONS, TOOL_MAP
-from mock_data import VEHICLE, VEHICLE_ERRORS
+from mock_data import VEHICLE, VEHICLE_ERRORS, ERROR_CASES, get_active_case, set_active_case
 
 # ── Page config ───────────────────────────────────────────────
 st.set_page_config(
@@ -75,6 +75,42 @@ st.markdown("""
 
 # ── Sidebar: Vehicle info ─────────────────────────────────────
 with st.sidebar:
+    # ── Case selector ─────────────────────────────────────────
+    st.markdown("## 🧪 Chọn Case Test")
+    case_keys = list(ERROR_CASES.keys())
+    case_labels = [ERROR_CASES[k]["label"] for k in case_keys]
+
+    if "active_case" not in st.session_state:
+        st.session_state.active_case = get_active_case()
+
+    selected_label = st.selectbox(
+        "Kịch bản lỗi xe",
+        case_labels,
+        index=case_keys.index(st.session_state.active_case),
+        key="case_selector",
+    )
+    selected_case = case_keys[case_labels.index(selected_label)]
+
+    # Nếu user đổi case → reset conversation
+    if selected_case != st.session_state.active_case:
+        set_active_case(selected_case)
+        st.session_state.active_case = selected_case
+        st.session_state.messages = []
+        st.session_state.agent_messages = []
+        st.session_state.auto_diagnostic = False
+        st.session_state.bookings = []
+        st.rerun()
+
+    # Show error summary for selected case
+    case_errors = ERROR_CASES[selected_case]["errors"]
+    if case_errors:
+        for err in case_errors:
+            sev = err["severity"]
+            st.markdown(f'<span class="severity-{sev}">{sev.upper()}</span> <small>{err["error_code"]}</small>', unsafe_allow_html=True)
+    else:
+        st.markdown("*Xe không có lỗi nào* ✅")
+
+    st.divider()
     st.markdown("## 🚗 Thông tin xe")
     st.markdown(f"""
     <div class="vehicle-card">
@@ -174,7 +210,7 @@ def get_agent_response(user_msg: str, agent_messages: list) -> tuple[str, list, 
 # ── Session state init ────────────────────────────────────────
 if "messages" not in st.session_state:
     st.session_state.messages = []          # UI display messages
-if "agent_messages" not in st.session_state:
+if "agent_messages" not in st.session_state or not st.session_state.agent_messages:
     st.session_state.agent_messages = [     # OpenAI API messages
         {"role": "system", "content": SYSTEM_PROMPT}
     ]

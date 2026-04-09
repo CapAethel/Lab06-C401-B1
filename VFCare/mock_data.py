@@ -27,35 +27,65 @@ VEHICLE = {
 }
 
 # ══════════════════════════════════════════════════════════════
-# DANH SÁCH LỖI TRÊN XE (theo từng mức độ)
+# DANH SÁCH LỖI THEO TỪNG CASE (dùng để test agent)
 # ══════════════════════════════════════════════════════════════
-# severity: critical / medium / low
-VEHICLE_ERRORS = [
-    {
-        "error_code": "BAT-0012",
-        "description": "Pin cao áp suy giảm bất thường - cell #14 chênh lệch điện áp",
-        "severity": "critical",
-        "detected_at": "2026-04-08T14:30:00",
-        "component": "Hệ thống pin cao áp",
-        "risk_if_delayed": "Nguy cơ cháy / hỏng pin nghiêm trọng, mất khả năng vận hành",
-    },
-    {
-        "error_code": "BRK-0045",
-        "description": "Má phanh trước mòn 82% - cần thay thế sớm",
-        "severity": "medium",
-        "detected_at": "2026-04-07T09:15:00",
-        "component": "Hệ thống phanh",
-        "risk_if_delayed": "Giảm hiệu suất phanh, tăng quãng đường phanh",
-    },
-    {
-        "error_code": "LGT-0003",
-        "description": "Đèn hậu bên phải nhấp nháy không đều",
-        "severity": "low",
-        "detected_at": "2026-04-06T18:00:00",
-        "component": "Hệ thống chiếu sáng",
-        "risk_if_delayed": "Ảnh hưởng tín hiệu giao thông, vi phạm luật",
-    },
-]
+
+# Từng lỗi riêng lẻ
+_ERR_CRITICAL = {
+    "error_code": "BAT-0012",
+    "description": "Pin cao áp suy giảm bất thường - cell #14 chênh lệch điện áp",
+    "severity": "critical",
+    "detected_at": "2026-04-08T14:30:00",
+    "component": "Hệ thống pin cao áp",
+    "risk_if_delayed": "Nguy cơ cháy / hỏng pin nghiêm trọng, mất khả năng vận hành",
+}
+
+_ERR_MEDIUM = {
+    "error_code": "BRK-0045",
+    "description": "Má phanh trước mòn 82% - cần thay thế sớm",
+    "severity": "medium",
+    "detected_at": "2026-04-07T09:15:00",
+    "component": "Hệ thống phanh",
+    "risk_if_delayed": "Giảm hiệu suất phanh, tăng quãng đường phanh",
+}
+
+_ERR_LOW = {
+    "error_code": "LGT-0003",
+    "description": "Đèn hậu bên phải nhấp nháy không đều",
+    "severity": "low",
+    "detected_at": "2026-04-06T18:00:00",
+    "component": "Hệ thống chiếu sáng",
+    "risk_if_delayed": "Ảnh hưởng tín hiệu giao thông, vi phạm luật",
+}
+
+# ── Định nghĩa các case test ─────────────────────────────────
+ERROR_CASES = {
+    "none":     {"label": "🟢 Không có lỗi (none)",               "errors": []},
+    "low":      {"label": "🔵 Chỉ lỗi nhẹ (low)",                "errors": [_ERR_LOW]},
+    "medium":   {"label": "🟡 Lỗi trung bình (medium)",          "errors": [_ERR_MEDIUM, _ERR_LOW]},
+    "critical": {"label": "🔴 Có lỗi nghiêm trọng (critical)",   "errors": [_ERR_CRITICAL, _ERR_MEDIUM, _ERR_LOW]},
+}
+
+# ── Active errors (mutable list, tools.py tham chiếu trực tiếp) ──
+VEHICLE_ERRORS: list[dict] = list(ERROR_CASES["critical"]["errors"])
+
+# Default case name
+_active_case: str = "critical"
+
+
+def get_active_case() -> str:
+    """Trả về tên case đang active."""
+    return _active_case
+
+
+def set_active_case(case_name: str) -> None:
+    """Đổi case test. Cập nhật VEHICLE_ERRORS in-place để tools.py nhìn thấy ngay."""
+    global _active_case
+    if case_name not in ERROR_CASES:
+        raise ValueError(f"Case '{case_name}' không hợp lệ. Chọn: {list(ERROR_CASES.keys())}")
+    _active_case = case_name
+    VEHICLE_ERRORS.clear()
+    VEHICLE_ERRORS.extend(ERROR_CASES[case_name]["errors"])
 
 # ══════════════════════════════════════════════════════════════
 # HÀM TÍNH KHOẢNG CÁCH (Haversine)

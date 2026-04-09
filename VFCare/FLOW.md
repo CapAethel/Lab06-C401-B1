@@ -6,7 +6,7 @@
 
 ## Kiến trúc
 
-```
+```text
 User (Streamlit / Terminal)
   │
   ▼

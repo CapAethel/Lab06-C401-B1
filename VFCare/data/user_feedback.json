@@ -191,6 +191,166 @@
         ],
         "status": "confirmed"
       }
+    },
+    {
+      "id": "FB_20260409113656_011",
+      "type": "agree",
+      "timestamp": "2026-04-09T11:36:56.492809",
+      "details": {
+        "workshop_id": "WS_001",
+        "workshop_name": "VFCare Hà Nội - Hoàng Mai",
+        "appointment_date": "2026-04-09",
+        "appointment_time": "10:00-11:00",
+        "issues_to_fix": [
+          "Thay má phanh trước và sau",
+          "Kiểm tra và bổ sung dầu phanh",
+          "Bơm không khí vào lốp (kiểm tra áp suất tiêu chuẩn)",
+          "Thay lốp xe",
+          "Thay lọc không khí",
+          "Bảo dưỡng định kỳ đến hạn"
+        ],
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "FB_20260409114414_012",
+      "type": "agree",
+      "timestamp": "2026-04-09T11:44:14.444976",
+      "details": {
+        "workshop_id": "WS_001",
+        "workshop_name": "VFCare Hà Nội - Hoàng Mai",
+        "appointment_date": "2026-04-09",
+        "appointment_time": "10:00-11:00",
+        "issues_to_fix": [
+          "Thay má phanh trước và sau",
+          "Kiểm tra và bổ sung dầu phanh",
+          "Bơm không khí vào lốp (kiểm tra áp suất tiêu chuẩn)",
+          "Thay lốp xe",
+          "Thay lọc không khí",
+          "Bảo dưỡng định kỳ đến hạn"
+        ],
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "FB_20260409114417_013",
+      "type": "agree",
+      "timestamp": "2026-04-09T11:44:17.204101",
+      "details": {
+        "workshop_id": "WS_001",
+        "workshop_name": "VFCare Hà Nội - Hoàng Mai",
+        "appointment_date": "2026-04-09",
+        "appointment_time": "10:00-11:00",
+        "issues_to_fix": [
+          "Thay má phanh trước và sau",
+          "Kiểm tra và bổ sung dầu phanh",
+          "Bơm không khí vào lốp (kiểm tra áp suất tiêu chuẩn)",
+          "Thay lốp xe",
+          "Thay lọc không khí",
+          "Bảo dưỡng định kỳ đến hạn"
+        ],
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "FB_20260409114759_014",
+      "type": "agree",
+      "timestamp": "2026-04-09T11:47:59.928333",
+      "details": {
+        "workshop_id": "WS_001",
+        "workshop_name": "VFCare Hà Nội - Hoàng Mai",
+        "appointment_date": "2026-04-09",
+        "appointment_time": "10:00-11:00",
+        "issues_to_fix": [
+          "Thay má phanh trước và sau",
+          "Kiểm tra và bổ sung dầu phanh",
+          "Bơm không khí vào lốp (kiểm tra áp suất tiêu chuẩn)",
+          "Thay lốp xe",
+          "Thay lọc không khí",
+          "Bảo dưỡng định kỳ đến hạn"
+        ],
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "FB_20260409114811_015",
+      "type": "agree",
+      "timestamp": "2026-04-09T11:48:11.495557",
+      "details": {
+        "workshop_id": "WS_001",
+        "workshop_name": "VFCare Hà Nội - Hoàng Mai",
+        "appointment_date": "2026-04-09",
+        "appointment_time": "10:00-11:00",
+        "issues_to_fix": [
+          "Thay má phanh trước và sau",
+          "Kiểm tra và bổ sung dầu phanh",
+          "Bơm không khí vào lốp (kiểm tra áp suất tiêu chuẩn)",
+          "Thay lốp xe",
+          "Thay lọc không khí",
+          "Bảo dưỡng định kỳ đến hạn"
+        ],
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "FB_20260409114920_016",
+      "type": "agree",
+      "timestamp": "2026-04-09T11:49:20.298012",
+      "details": {
+        "workshop_id": "WS_001",
+        "workshop_name": "VFCare Hà Nội - Hoàng Mai",
+        "appointment_date": "2026-04-09",
+        "appointment_time": "10:00-11:00",
+        "issues_to_fix": [
+          "Thay má phanh trước và sau",
+          "Kiểm tra và bổ sung dầu phanh",
+          "Bơm không khí vào lốp (kiểm tra áp suất tiêu chuẩn)",
+          "Thay lốp xe",
+          "Thay lọc không khí",
+          "Bảo dưỡng định kỳ đến hạn"
+        ],
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "FB_20260409115402_017",
+      "type": "agree",
+      "timestamp": "2026-04-09T11:54:02.622548",
+      "details": {
+        "workshop_id": "WS_001",
+        "workshop_name": "VFCare Hà Nội - Hoàng Mai",
+        "appointment_date": "2026-04-09",
+        "appointment_time": "10:00-11:00",
+        "issues_to_fix": [
+          "Thay má phanh trước và sau",
+          "Kiểm tra và bổ sung dầu phanh",
+          "Bơm không khí vào lốp (kiểm tra áp suất tiêu chuẩn)",
+          "Thay lốp xe",
+          "Thay lọc không khí",
+          "Bảo dưỡng định kỳ đến hạn"
+        ],
+        "status": "confirmed"
+      }
+    },
+    {
+      "id": "FB_20260409120103_018",
+      "type": "agree",
+      "timestamp": "2026-04-09T12:01:03.359554",
+      "details": {
+        "workshop_id": "WS_001",
+        "workshop_name": "VFCare Hà Nội - Hoàng Mai",
+        "appointment_date": "2026-04-09",
+        "appointment_time": "10:00-11:00",
+        "issues_to_fix": [
+          "Thay má phanh trước và sau",
+          "Kiểm tra và bổ sung dầu phanh",
+          "Bơm không khí vào lốp (kiểm tra áp suất tiêu chuẩn)",
+          "Thay lốp xe",
+          "Thay lọc không khí",
+          "Bảo dưỡng định kỳ đến hạn"
+        ],
+        "status": "confirmed"
+      }
     }
   ]
 }

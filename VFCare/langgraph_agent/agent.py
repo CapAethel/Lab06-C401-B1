@@ -14,32 +14,46 @@ class VFCareGraphAgent:
     def _build_graph(self) -> StateGraph:
         """Build the LangGraph workflow"""
         graph = StateGraph(VFCareGraphState)
-        
+
         # Add nodes
         graph.add_node("load_vehicle", VFCareNodes.load_vehicle_node)
-        graph.add_node("analyze_vehicle", VFCareNodes.analyze_vehicle_node)
         graph.add_node("detect_issues", VFCareNodes.detect_issues_node)
+        graph.add_node("confirm_to_proceed", VFCareNodes.confirm_to_proceed_node)
         graph.add_node("calculate_priority", VFCareNodes.calculate_priority_node)
         graph.add_node("generate_recommendations", VFCareNodes.generate_recommendations_node)
         graph.add_node("suggest_workshops", VFCareNodes.suggest_workshops_node)
         graph.add_node("handle_user_input", VFCareNodes.handle_user_input_node)
         graph.add_node("book_appointment", VFCareNodes.book_appointment_node)
         graph.add_node("save_feedback", VFCareNodes.save_feedback_node)
-        
+
         # Define edges
-        graph.add_edge("load_vehicle", "analyze_vehicle")
-        graph.add_edge("analyze_vehicle", "detect_issues")
-        graph.add_edge("detect_issues", "calculate_priority")
+        graph.add_edge("load_vehicle", "detect_issues")
+        graph.add_edge("detect_issues", "confirm_to_proceed")
+
+        # Conditional edge after confirm_to_proceed: route based on user decision
+        def route_after_confirm(state):
+            return "proceed" if state.user_action == "proceed" else "decline"
+
+        graph.add_conditional_edges(
+            "confirm_to_proceed",
+            route_after_confirm,
+            {
+                "proceed": "calculate_priority",
+                "decline": END
+            }
+        )
+
+        # Continue with main flow
         graph.add_edge("calculate_priority", "generate_recommendations")
         graph.add_edge("generate_recommendations", "suggest_workshops")
         graph.add_edge("suggest_workshops", "handle_user_input")
         graph.add_edge("handle_user_input", "book_appointment")
         graph.add_edge("book_appointment", "save_feedback")
         graph.add_edge("save_feedback", END)
-        
+
         # Set entry point
         graph.set_entry_point("load_vehicle")
-        
+
         return graph.compile()
     
     def run(self) -> VFCareGraphState:
@@ -107,12 +121,15 @@ class VFCareGraphAgent:
                 print(f"   - {ws['name']} ({ws['distance_km']} km, {ws['rating']}/5)")
         
         # Print booking
-        if state.selected_workshop:
+        if state.selected_workshop and state.user_feedback.get('id'):
             print(f"\n✅ Booking:")
             print(f"   Workshop: {state.selected_workshop.get('name', 'N/A')}")
             print(f"   Date: {state.selected_time_slot.get('date', 'N/A')}")
             print(f"   Time: {state.selected_time_slot.get('time', 'N/A')}")
             print(f"   Booking ID: {state.user_feedback.get('id', 'N/A')}")
+        elif state.user_action == "decline":
+            print(f"\n❌ Booking Declined")
+            print(f"   User did not confirm the workshop suggestion")
         
         # Print LLM conversation
         print(f"\n💬 LLM Conversation:")

@@ -10,6 +10,33 @@ from mock_data import VEHICLE, VEHICLE_ERRORS, WORKSHOPS, WORKSHOP_SLOTS, BOOKIN
 
 
 # ──────────────────────────────────────────────────────────────
+# 0. get_user_info - Lấy thông tin người dùng + xe
+# ──────────────────────────────────────────────────────────────
+def get_user_info() -> str:
+    """Trả về thông tin chủ xe và xe VinFast."""
+    user_info = {
+        "owner": VEHICLE["owner"],
+        "phone": VEHICLE["phone"],
+        "vehicle": {
+            "id": VEHICLE["id"],
+            "model": VEHICLE["model"],
+            "year": VEHICLE["year"],
+            "license_plate": VEHICLE["license_plate"],
+            "odometer_km": VEHICLE["odometer_km"],
+            "battery_health_pct": VEHICLE["battery_health_pct"],
+            "last_maintenance": VEHICLE["last_maintenance"],
+            "warranty_until": VEHICLE["warranty_until"],
+        },
+        "location": {
+            "area": "Đống Đa, Hà Nội",
+            "lat": VEHICLE["current_lat"],
+            "lng": VEHICLE["current_lng"],
+        },
+    }
+    return json.dumps(user_info, ensure_ascii=False)
+
+
+# ──────────────────────────────────────────────────────────────
 # 1. get_vehicle_info - Lấy thông tin xe (duy nhất)
 # ──────────────────────────────────────────────────────────────
 def get_vehicle_info() -> str:
@@ -352,6 +379,18 @@ TOOL_DEFINITIONS = [
     {
         "type": "function",
         "function": {
+            "name": "get_user_info",
+            "description": "Lấy thông tin người dùng (chủ xe) và xe VinFast: tên, SĐT, model, biển số, ODO, pin, vị trí hiện tại. Gọi đầu tiên để biết đang nói chuyện với ai.",
+            "parameters": {
+                "type": "object",
+                "properties": {},
+                "required": []
+            }
+        }
+    },
+    {
+        "type": "function",
+        "function": {
             "name": "get_vehicle_info",
             "description": "Lấy thông tin chi tiết của xe VinFast hiện tại (model, chủ xe, ODO, tình trạng pin, bảo hành, vị trí...)",
             "parameters": {
@@ -471,6 +510,7 @@ TOOL_DEFINITIONS = [
 
 # Map tên function → callable
 TOOL_MAP = {
+    "get_user_info": get_user_info,
     "get_vehicle_info": get_vehicle_info,
     "run_diagnostic": run_diagnostic,
     "recommend_schedule": recommend_schedule,

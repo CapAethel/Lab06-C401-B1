@@ -22,7 +22,7 @@ def main():
     agent = VFCareAgent()
 
     # Agent tự chào chủ xe và chạy diagnostic luôn
-    greeting = agent.chat("Hãy chào chủ xe và tự động chạy kiểm tra chẩn đoán xe, sau đó báo cáo kết quả và gợi ý.")
+    greeting = agent.chat("Bắt đầu! Hãy lấy thông tin người dùng, chào chủ xe và chạy kiểm tra chẩn đoán xe.")
     print(f"🤖 VFCare: {greeting}\n")
 
     while True:

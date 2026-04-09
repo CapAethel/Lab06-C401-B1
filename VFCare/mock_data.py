@@ -14,7 +14,7 @@ VEHICLE = {
     "id": "VF8-001",
     "model": "VinFast VF8",
     "year": 2024,
-    "owner": "Nguyễn Văn An",
+    "owner": "Bàn B1",
     "phone": "0901234567",
     "license_plate": "30A-12345",
     "odometer_km": 35200,

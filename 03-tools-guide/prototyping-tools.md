@@ -9,12 +9,12 @@ Chọn tool theo level prototype của nhóm. Không cần dùng hết — chọ
 | Level | Mô tả | Ví dụ | Điểm |
 |-------|-------|-------|------|
 | **Sketch** | Vẽ/draft flow trên giấy, slides, whiteboard. Chưa build gì. | Vẽ user journey trên giấy A3: user mở app → nhập triệu chứng → AI gợi ý khoa → user chọn → đặt lịch | Đủ điểm |
-| **Mock prototype** | UI/flow build được (HTML, app) nhưng chưa gắn AI thật. Dùng tools: Antigravity, Claude, v0, Figma... | App HTML có form nhập triệu chứng, hiện kết quả mẫu, flow click được — nhưng chưa gọi API AI | Đủ điểm |
-| **Working prototype** | Có AI chạy thật. Input → AI xử lý → output. Demo live được. | App gọi Gemini API: user nhập triệu chứng → AI phân tích → trả gợi ý khoa + confidence score | **Bonus điểm** |
+| **Mock prototype** | UI/flow build được (HTML, app) nhưng chưa gắn AI thật. Dùng tools: Claude Artifacts, v0, Figma... | App HTML có form nhập triệu chứng, hiện kết quả mẫu, flow click được — nhưng chưa gọi API AI | **Bonus** |
+| **Working prototype** | Có AI chạy thật. Input → AI xử lý → output. Demo live được. | App gọi Gemini API: user nhập triệu chứng → AI phân tích → trả gợi ý khoa + confidence score | **Bonus ++** |
 
 **Lưu ý:**
 - Sketch + Mock: vẫn phải có ít nhất 1 prompt/AI call chạy thật kèm theo (chạy riêng, show bên cạnh)
-- Working prototype: dùng vibe-coding tools (Cursor, Claude Code, Replit Agent...) hoàn toàn OK
+- Working prototype: dùng vibe-coding tools (Claude Code, Antigravity, Cursor...) hoàn toàn OK
 - Mọi level: mỗi người giải thích được phần mình làm. Không hiểu = 0 điểm demo
 
 ---
@@ -22,13 +22,6 @@ Chọn tool theo level prototype của nhóm. Không cần dùng hết — chọ
 ## Tools cho mock prototype
 
 Build UI/flow nhanh, chưa cần gắn AI.
-
-### Antigravity (Google)
-
-AI app builder — mô tả app bằng text, Antigravity generate full web app chạy được. Kéo thả chỉnh sửa, export HTML.
-
-- **Tốt cho:** mock prototype nhanh, không cần code
-- **Bắt đầu:** mô tả app muốn tạo → chỉnh layout → export/share link
 
 ### Claude Artifacts
 
@@ -64,19 +57,33 @@ Tạo mock screens nhanh bằng drag-and-drop. Template sẵn cho mobile app, we
 
 Build prototype có AI chạy thật.
 
+### Claude Code
+
+AI coding agent chạy trong terminal. Mô tả feature bằng text → Claude Code viết code, tạo file, chạy command, debug — toàn bộ flow trong terminal.
+
+- **Tốt cho:** nhóm có dev experience, build full-stack prototype nhanh
+- **Bắt đầu:** cài CLI → mở terminal trong project folder → mô tả app muốn build
+
+### Antigravity (Google)
+
+AI app builder — mô tả app bằng text, Antigravity generate full web app có AI tích hợp. Kéo thả chỉnh sửa, deploy trực tiếp.
+
+- **Tốt cho:** working prototype nhanh, không cần code, có thể gắn Gemini API
+- **Bắt đầu:** mô tả app → chỉnh layout + logic → connect AI → deploy/share link
+
+### Cursor
+
+VS Code + AI coding. Viết code nhanh với AI autocomplete, chat, và Composer (multi-file edit).
+
+- **Tốt cho:** nhóm có dev experience, project phức tạp hơn
+- **Bắt đầu:** download → mở project → Cmd+K generate code
+
 ### Google AI Studio (Gemini)
 
 Test prompt Gemini trực tiếp trên web. Tạo structured prompt, few-shot examples, tune parameter. Share link prompt.
 
 - **Tốt cho:** test nhanh Gemini models, không cần code
 - **Bắt đầu:** vào aistudio.google.com → New prompt → chọn model → test
-
-### Stitch (Google)
-
-Full-stack app builder có tích hợp Gemini. Mô tả app → Stitch generate code + database + API + UI. Deploy trực tiếp.
-
-- **Tốt cho:** working prototype cần backend + database + AI
-- **Bắt đầu:** mô tả app → chỉnh sửa → connect Gemini API → deploy
 
 ### ChatGPT Custom GPTs
 
@@ -98,20 +105,6 @@ Framework Python tạo web app từ 1 file. Deploy free trên Streamlit Cloud.
 
 - **Tốt cho:** UI đẹp hơn chat, cần custom logic
 - **Bắt đầu:** `pip install streamlit` → viết `app.py` → `streamlit run app.py`
-
-### Replit / Replit Agent
-
-Online IDE, code + deploy 1 chỗ. Replit Agent: mô tả app bằng text → Agent viết code cho bạn.
-
-- **Tốt cho:** code cùng lúc (multiplayer), deploy nhanh, không cần setup local
-- **Bắt đầu:** tạo Repl → chọn template hoặc dùng Agent → code → bấm Run
-
-### Cursor
-
-VS Code + AI coding. Viết code nhanh với AI autocomplete, chat, và Composer (multi-file edit).
-
-- **Tốt cho:** nhóm có dev experience, project phức tạp hơn
-- **Bắt đầu:** download → mở project → Cmd+K generate code
 
 ### Google Colab
 
@@ -136,10 +129,10 @@ Jupyter notebook online, free GPU. Chạy Python + gọi API trực tiếp.
 
 | Nhóm kiểu | Tool đề xuất | Level |
 |------------|-------------|-------|
-| Chưa biết code | Antigravity / Claude / Figma | Mock prototype |
+| Chưa biết code | Claude Artifacts / v0 / Figma | Mock prototype |
 | Biết prompt, chưa biết code | AI Studio / Custom GPT / Claude Project | Working prototype |
 | Biết Python cơ bản | Streamlit / Colab + API | Working prototype |
-| Dev experience | Cursor / Replit / Stitch | Working prototype |
+| Dev experience | Claude Code / Antigravity / Cursor | Working prototype |
 
 Bất kể chọn gì: phải demo được trong 2 phút + mỗi người giải thích được phần mình.
 

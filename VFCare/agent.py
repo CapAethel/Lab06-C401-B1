@@ -19,12 +19,21 @@ class VFCareAgent:
     def __init__(self):
         self.client = OpenAI(api_key=os.environ.get("OPENAI_API_KEY"))
         self.model = os.environ.get("OPENAI_MODEL", "gpt-4o-mini")
+        self.tool_names = sorted([
+            t["function"]["name"]
+            for t in TOOL_DEFINITIONS
+            if t.get("type") == "function" and t.get("function", {}).get("name")
+        ])
         self.messages: list[dict] = [
             {"role": "system", "content": SYSTEM_PROMPT}
         ]
 
     def chat(self, user_message: str) -> str:
         """Gửi tin nhắn từ user, xử lý tool calls, trả về response cuối cùng."""
+        normalized = user_message.lower()
+        if "tool" in normalized and any(k in normalized for k in ["có", "danh sách", "list", "available"]):
+            return "Các tool hiện có: " + ", ".join(self.tool_names)
+
         self.messages.append({"role": "user", "content": user_message})
 
         while True:

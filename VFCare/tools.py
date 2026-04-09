@@ -418,6 +418,92 @@ def get_explainability(error_code: str) -> str:
         ),"recommendation": "Dựa trên phân tích AI với dữ liệu từ hàng nghìn xe VinFast, chúng tôi khuyến nghị xử lý lỗi này theo mức ưu tiên đã đề xuất.",}, ensure_ascii=False)
 
 
+# ──────────────────────────────────────────────────────────────
+# 8. estimate_maintenance_cost - Ước tính chi phí bảo dưỡng
+# ──────────────────────────────────────────────────────────────
+def estimate_maintenance_cost(error_codes: list[str], workshop_id: str = "") -> str:
+    """
+    Ước tính chi phí sửa chữa theo danh sách mã lỗi.
+    - Áp dụng giảm giá bảo hành cho hạng mục pin cao áp nếu xe còn bảo hành.
+    - Trả về breakdown từng lỗi + tổng tiền tạm tính.
+    """
+    if not error_codes:
+        return json.dumps({"error": "Vui lòng cung cấp ít nhất 1 mã lỗi."}, ensure_ascii=False)
+
+    # Bảng giá mock theo mã lỗi
+    base_price_map = {
+        "BAT-0012": {"label": "Kiểm tra/cân bằng pin cao áp", "parts": 4200000, "labor": 1200000},
+        "BRK-0045": {"label": "Thay má phanh trước", "parts": 1450000, "labor": 650000},
+        "LGT-0003": {"label": "Sửa/thay cụm đèn hậu", "parts": 550000, "labor": 250000},
+    }
+
+    now_date = datetime.now().date()
+    warranty_until = datetime.strptime(VEHICLE["warranty_until"], "%Y-%m-%d").date()
+    in_warranty = now_date <= warranty_until
+
+    selected_workshop = next((ws for ws in WORKSHOPS if ws["id"] == workshop_id), None) if workshop_id else None
+    workshop_name = selected_workshop["name"] if selected_workshop else "Chưa chọn xưởng"
+
+    line_items = []
+    subtotal_parts = 0
+    subtotal_labor = 0
+    total_discount = 0
+    unknown_codes = []
+
+    for code in error_codes:
+        pricing = base_price_map.get(code)
+        if not pricing:
+            unknown_codes.append(code)
+            continue
+
+        parts_cost = pricing["parts"]
+        labor_cost = pricing["labor"]
+        discount = 0
+
+        # Giảm 20% tiền công cho lỗi pin nếu còn bảo hành
+        if code == "BAT-0012" and in_warranty:
+            discount = int(labor_cost * 0.2)
+
+        subtotal_parts += parts_cost
+        subtotal_labor += labor_cost
+        total_discount += discount
+
+        line_items.append({
+            "error_code": code,
+            "service": pricing["label"],
+            "parts_cost_vnd": parts_cost,
+            "labor_cost_vnd": labor_cost,
+            "discount_vnd": discount,
+            "line_total_vnd": parts_cost + labor_cost - discount,
+        })
+
+    if not line_items:
+        return json.dumps({
+            "error": "Không có mã lỗi hợp lệ để tính chi phí.",
+            "unknown_error_codes": unknown_codes,
+        }, ensure_ascii=False)
+
+    total_estimated = subtotal_parts + subtotal_labor - total_discount
+
+    return json.dumps({
+        "vehicle_id": VEHICLE["id"],
+        "workshop_id": workshop_id or None,
+        "workshop_name": workshop_name,
+        "in_warranty": in_warranty,
+        "warranty_until": VEHICLE["warranty_until"],
+        "currency": "VND",
+        "line_items": line_items,
+        "summary": {
+            "subtotal_parts_vnd": subtotal_parts,
+            "subtotal_labor_vnd": subtotal_labor,
+            "total_discount_vnd": total_discount,
+            "estimated_total_vnd": total_estimated,
+        },
+        "unknown_error_codes": unknown_codes,
+        "note": "Chi phí chỉ mang tính ước tính trước khi kỹ thuật viên kiểm tra trực tiếp.",
+    }, ensure_ascii=False)
+
+
 # ══════════════════════════════════════════════════════════════
 # TOOL DEFINITIONS cho OpenAI function calling
 # ══════════════════════════════════════════════════════════════
@@ -552,6 +638,28 @@ TOOL_DEFINITIONS = [
             }
         }
     },
+    {
+        "type": "function",
+        "function": {
+            "name": "estimate_maintenance_cost",
+            "description": "Ước tính chi phí bảo dưỡng/sửa chữa theo danh sách mã lỗi, có breakdown vật tư, công sửa và giảm giá bảo hành (nếu có).",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "error_codes": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                        "description": "Danh sách mã lỗi cần ước tính chi phí, ví dụ: [\"BAT-0012\", \"BRK-0045\"]"
+                    },
+                    "workshop_id": {
+                        "type": "string",
+                        "description": "Mã xưởng (tuỳ chọn), ví dụ: WS-HN01"
+                    }
+                },
+                "required": ["error_codes"]
+            }
+        }
+    },
 ]
 
 # Map tên function → callable
@@ -564,4 +672,5 @@ TOOL_MAP = {
     "book_appointment": book_appointment,
     "cancel_or_postpone": cancel_or_postpone,
     "get_explainability": get_explainability,
+    "estimate_maintenance_cost": estimate_maintenance_cost,
 }
